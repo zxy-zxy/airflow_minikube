@@ -1,4 +1,4 @@
-### Airflow on kubernetes with minikube
+### Airflow with KubernetesExecutor on minikube
 This repo contains an example of how you can run Airflow with on a kubernetes with minikube.
 
 All credits go to [BrechtDeVlieger/airflow-kube-helm](https://github.com/BrechtDeVlieger/airflow-kube-helm).
@@ -29,10 +29,9 @@ helm dependency update
 ```bash
 helm install airflow . -f values.yaml --namespace airflow
 ```
-* Upgrade & delete helm chart 
+* Upgrade 
 ```bash
 helm upgrade airflow . -f values.yaml --namespace airflow
-helm delete airflow --namespace=airflow
 ```
 #### Deployment
 
@@ -40,15 +39,11 @@ helm delete airflow --namespace=airflow
 ```bash
 $ echo "$(minikube ip) airflow.world" | sudo tee -a /etc/hosts
 ```
-
-* Expose service
-```bash
-kubectl expose deployment airflow-chart-web --type=NodePort --name=my-service
-minikube service my-service --url
-```
-* Setup git-sync
+* You may need to provide additional settings in order to setup git-sync
   * Provide username & password for private repo or
   * Update [values](/airflow/values.yaml) with your private ssh key and known_hosts
+
+* Check [http://airflow.world](http://airflow.world)
 
 ```bash
 ssh-keyscan -H <your_git_source_here> 
@@ -58,7 +53,6 @@ ssh-keyscan -H <your_git_source_here>
 ```bash
 kubectl get pods --namespace=airflow
 kubectl get all --namespace=airflow
+helm delete airflow --namespace=airflow
 kubectl delete --all pods --namespace=airflow --force --grace-period=0
 ```
-
-

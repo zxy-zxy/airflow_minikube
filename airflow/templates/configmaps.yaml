@@ -18,7 +18,17 @@ data:
       AIRFLOW_VERSION=`pip freeze | grep apache-airflow | cut -d'=' -f3`
     cd $AIRFLOW_PATH/airflow
     echo $AIRFLOW__CORE__SQL_ALCHEMY_CONN
-    airflow upgradedb
+    airflow upgradedb;
+    sleep 10;
+    {{- if .Values.airflow.rbac.enabled }}
+    airflow create_user \
+    --role Admin \
+    --username admin \
+    --password admin \
+    --firstname admin \
+    --lastname admin \
+    --email admin@airflow.com;
+    {{- end }}
 ---
 {{- if .Values.airflow.dags.persistence.enabled }}
 apiVersion: v1
@@ -50,6 +60,11 @@ data:
   AIRFLOW__CORE__EXECUTOR: KubernetesExecutor
   AIRFLOW__CORE__LOGGING_LEVEL: DEBUG
   AIRFLOW__LOGGING__LOGGING_LEVEL: DEBUG
+  {{- if .Values.airflow.rbac.enabled }}
+  AIRFLOW__WEBSERVER__AUTHENTICATE: "True"
+  AIRFLOW__WEBSERVER__RBAC: "True"
+  AIRFLOW__WEBSERVER__AUTH_BACKEND: airflow.contrib.auth.backends.password_auth
+  {{ end }}
 ---
 
 apiVersion: v1
