@@ -1,7 +1,7 @@
 ### Airflow with KubernetesExecutor on minikube
 This repo contains an example of how you can run Airflow with on a kubernetes with minikube.
 
-All credits go to [BrechtDeVlieger/airflow-kube-helm](https://github.com/BrechtDeVlieger/airflow-kube-helm).
+All credits goes to [BrechtDeVlieger/airflow-kube-helm](https://github.com/BrechtDeVlieger/airflow-kube-helm).
 
 Tested with Docker version 18.09.7, minikube 1.16.2 and helm 3.0.2
 #### Docker
