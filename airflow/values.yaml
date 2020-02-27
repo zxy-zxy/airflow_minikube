@@ -19,7 +19,7 @@ airflow:
     type: ClusterIP
   image:
     repository: airflow
-    tag: 1.10.4
+    tag: 1.10.9
     pull_policy: IfNotPresent
     rbac:
       enabled: false

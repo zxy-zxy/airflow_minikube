@@ -8,7 +8,7 @@ Tested with Docker version 18.09.7, minikube 1.16.2 and helm 3.0.2
 * Build docker image
 
 ```bash
-./docker/build-docker.sh airflow 1.10.4
+./docker/build-docker.sh airflow 1.10.9
 ```
 * Confirm image has been built
 ```bash
