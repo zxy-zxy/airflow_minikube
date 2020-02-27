@@ -1,0 +1,67 @@
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  web:
+    path: "/"
+    host: "airflow.world"
+
+replicaCount: 1
+
+rbac:
+  enabled: true
+
+airflow:
+  fernet_key: "abcdefghijklmnopqrstuvwxyzABCDEFG1234567890="
+  service:
+    type: ClusterIP
+  image:
+    repository: airflow
+    tag: 1.10.4
+    pull_policy: IfNotPresent
+    rbac:
+      enabled: false
+  dags:
+    persistence:
+      enabled: false
+      size: 1Gi
+      accessMode: ReadWriteOnce
+      init_dags: |
+        set -x
+        echo "$PWD"
+        git clone https://github.com/puckel/docker-airflow.git
+        cp -r docker-airflow/dags/* /usr/local/airflow/dags/
+
+    git:
+      url: https://github.com/zxy-zxy/airflow_minikube
+      branch: master
+      subpath: dags
+      username:
+      password:
+      enable_ssh: false
+      ssh:
+      known_hosts:
+
+  logs:
+    persistence:
+      accessMode: ReadWriteOnce
+      existingClaim:
+      existingClaimSubPath:
+      size: 1Gi
+
+  rbac:
+    enabled: false
+
+postgresql:
+  enabled: true
+  service:
+    port: 5432
+  existingSecretKey: postgresql-password
+  postgresqlUsername: postgres
+  postgresqlPassword: airflow
+  postgresqlDatabase: airflow
+  persistence:
+    enabled: true
+    accessMode: ReadWriteOnce
